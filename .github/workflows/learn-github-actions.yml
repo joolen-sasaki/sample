@@ -1,13 +1,26 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+# ワークフローの名前
+name: Workflow Trigger Check
+
+# ワークフローが実行されるトリガーを指定
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+# 実行されるジョブを定義
 jobs:
-  check-bats-version:
+  # "check" という名前のジョブ
+  check:
+    # ジョブを実行する仮想環境の種類
     runs-on: ubuntu-latest
+
+    # ジョブのステップ
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+      # 1. チェックアウトのステップ (必須ではありませんが、通常は含めます)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. 起動確認のメッセージを出力するステップ
+      - name: Show trigger confirmation message
+        run: echo "🎉 Workflow triggered successfully!"
