@@ -10,7 +10,7 @@ jobs:
   setup:
     # ⬇️ この行を追加
     # タグ名に 'rc' が含まれていない場合のみ、このジョブを実行
-    if: "!contains(github.ref_name, 'rc')"
+    if: github.event_name == 'workflow_dispatch' || !contains(github.ref_name, 'rc')
 
     runs-on: ubuntu-latest
     steps:
