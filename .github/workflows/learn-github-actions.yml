@@ -1,28 +1,21 @@
-# ワークフローの名前
-name: Workflow Trigger Check
+name: Update Documentation API Files
 
-# ワークフローが実行されるトリガーを指定
 on:
   workflow_dispatch:
   push:
     tags:
-      - 'v*'
-    tags-ignore:
-      - '**rc**' # タグ名にrcが含まれるものを除外
+      - 'v*' # vで始まるすべてのタグでワークフローをトリガー
 
-# 実行されるジョブを定義
 jobs:
-  # "check" という名前のジョブ
-  check:
-    # ジョブを実行する仮想環境の種類
-    runs-on: ubuntu-latest
+  setup:
+    # ⬇️ この行を追加
+    # タグ名に 'rc' が含まれていない場合のみ、このジョブを実行
+    if: "!contains(github.ref_name, 'rc')"
 
-    # ジョブのステップ
+    runs-on: ubuntu-latest
     steps:
-      # 1. チェックアウトのステップ (必須ではありませんが、通常は含めます)
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. 起動確認のメッセージを出力するステップ
-      - name: Show trigger confirmation message
-        run: echo "🎉 Workflow triggered successfully!"
+      - name: Run job steps
+        run: echo "Running job for tag ${{ github.ref_name }} because it's not a release candidate."
